@@ -59,12 +59,7 @@ class Shape {
       div.addEventListener("dblclick", (e) => {
         if (e.target === div) {
           e.target.remove();
-          canvasShape.textContent = ``;
-          canvasHeight.textContent = ``;
-          canvasWidth.textContent = ``;
-          canvasPerimeter.textContent = ``;
-          canvasArea.textContent = ``;
-          canvasRadius.textContent = ``;
+          clearStats();
         }
       });
     });
@@ -92,6 +87,12 @@ class Rectangle extends Shape {
     this.shape.style.height = `${height}px`;
     this.shape.style.width = `${width}px`;
     this.shapeStats();
+
+    // Show stats when clicked
+    this.shape.addEventListener("click", () => {
+      clearStats();
+      this.shapeStats();
+    });
   }
 
   shapeStats() {
@@ -129,9 +130,12 @@ class Square extends Shape {
     this.shape.style.height = `${height}px`;
     this.shape.style.width = `${height}px`;
     this.shapeStats();
-    console.log(this.shape);
-    console.log(this.shape.style.width);
-    console.log(this.shape.style.height);
+
+    // Show stats when clicked
+    this.shape.addEventListener("click", () => {
+      clearStats();
+      this.shapeStats();
+    });
   }
 
   shapeStats() {
@@ -166,6 +170,12 @@ class Circle extends Shape {
     this.shape.style.height = `${height}px`;
     this.shape.style.width = `${height}px`;
     this.shapeStats();
+
+    // Show stats when clicked
+    this.shape.addEventListener("click", () => {
+      clearStats();
+      this.shapeStats();
+    });
   }
 
   shapeStats() {
@@ -185,12 +195,12 @@ class Circle extends Shape {
   }
 
   circlePerimeter(radius) {
-    let perimeter = (2 * Math.PI * radius).toFixed(2);
+    let perimeter = (2 * Math.PI * radius).toFixed(0);
     return perimeter;
   }
 
   circleArea(radius) {
-    let area = (Math.PI * radius * radius).toFixed(2);
+    let area = (Math.PI * radius * radius).toFixed(0);
     return area;
   }
 }
@@ -202,13 +212,24 @@ class Triangle extends Shape {
     this.shape.classList.add("triangle");
     this.shape.style.height = `${height}px`;
     this.shape.style.width = `${height}px`;
+    this.shape.style.borderBottom = `${height}px solid orange`;
+    this.shape.style.borderRight = `${height / 2}px solid transparent`;
+    this.shape.style.borderLeft = `${height / 2}px solid transparent`;
     this.shapeStats();
+
+    // Show stats when clicked
+    this.shape.addEventListener("click", () => {
+      clearStats();
+      this.shapeStats();
+    });
   }
 
   shapeStats() {
     canvasShape.textContent = "Triangle";
     canvasHeight.textContent = `${this.height} px`;
     canvasWidth.textContent = `${this.height} px`;
+    canvasPerimeter.textContent = this.trianglePerimeter(Number(this.height));
+    canvasArea.textContent = this.triangleArea(this.height, this.height);
 
     canvasShape.style.color = "orange";
     canvasHeight.style.color = "orange";
@@ -217,19 +238,29 @@ class Triangle extends Shape {
     canvasArea.style.color = "orange";
   }
 
-  trianglePerimeter() {}
+  trianglePerimeter(side) {
+    let perimeter = side + side + side;
+    return perimeter;
+  }
+
+  triangleArea(height, base) {
+    let area = 0.5 * (height * base);
+
+    return area;
+  }
 }
 
 // Create rectangle
 function createRectangle(e) {
+  clearStats();
   let recHeight = rectangleHeight.value;
   let recWidth = rectangleWidth.value;
 
-  if (recHeight > 300) {
+  if (recHeight > 600) {
     alert("Height exceeds canvas limit");
-  } else if (recWidth > 300) {
+  } else if (recWidth > 600) {
     alert("Width exceeds canvas limit");
-  } else if (recWidth > 300 && recHeight > 300) {
+  } else if (recWidth > 600 && recHeight > 600) {
     alert("Height and width exceed canvas limits");
   } else if (recHeight === "") {
     alert("Please input a height");
@@ -247,9 +278,10 @@ function createRectangle(e) {
 // Create square
 
 function createSquare(e) {
+  clearStats();
   let squareCalc = squareSideLength.value;
 
-  if (squareCalc > 300) {
+  if (squareCalc > 600) {
     alert("Length exceeds canvas limit");
   } else if (squareCalc === "") {
     alert("Please input a length");
@@ -262,9 +294,10 @@ function createSquare(e) {
 // Create circle
 
 function createCircle(e) {
+  clearStats();
   let circleCalc = circleRadius.value;
 
-  if (circleCalc > 300) {
+  if (circleCalc > 600) {
     alert("Radius exceeds canvas limit");
   } else if (circleCalc === "") {
     alert("Please input a radius");
@@ -277,9 +310,10 @@ function createCircle(e) {
 // Create Triangle
 
 function createTriangle(e) {
+  clearStats();
   let triangleCalc = triangleHeight.value;
 
-  if (triangleCalc > 300) {
+  if (triangleCalc > 600) {
     alert("Height exceeds canvas limit");
   } else if (triangleCalc === "") {
     alert("Please input a height");
@@ -292,4 +326,15 @@ function createTriangle(e) {
 // Random shape placement
 function randomVal(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
+}
+
+// Clear previous stats
+
+function clearStats() {
+  canvasShape.textContent = ``;
+  canvasHeight.textContent = ``;
+  canvasWidth.textContent = ``;
+  canvasPerimeter.textContent = ``;
+  canvasArea.textContent = ``;
+  canvasRadius.textContent = ``;
 }
